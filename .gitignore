@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+target/
+*.sqlite
+*.db
+.DS_Store
+# never commit captured token/credential dumps or raw personal data
+*.tokens
+raw_captures/
+# personal / device-identifying data — never public
+*.csv
+device.toml
+device.json
+.env
+.serena/
