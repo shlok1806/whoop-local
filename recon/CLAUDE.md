@@ -11,5 +11,9 @@ This code is throwaway — do not build abstractions. One connect-and-dump scrip
   first, or connects will be flaky.
 - Treat 4.0-derived protocol notes as a hypothesis to verify against *our* 5.0, never as fact.
 
+`enumerate.py` is the one recon script. It writes the GATT map to `docs/gatt_map_5.0.md` but
+**redacts the band's device address** — the map is publishable, the address is not (it prints to
+the console only). Keep that split if you extend it.
+
 Update this file only if a non-obvious recon convention emerges (e.g. a required scan filter or a
 pairing dance the band needs).

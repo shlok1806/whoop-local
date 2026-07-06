@@ -1,3 +1,4 @@
+
 # whoop-local
 
 A local-first client for reading data **directly off a WHOOP 5.0 band over Bluetooth LE** —
@@ -64,30 +65,36 @@ pip install bleak
 ## Phases
 
 ### Phase 0 — Recon  *(Python, ~1 evening)*  → `recon/`
+
 Scan, connect, enumerate every GATT service + characteristic (UUIDs + properties:
 notify/read/write). Dump to a file. **Goal:** know exactly what the 5.0 exposes before decoding.
 Deliverable: `docs/gatt_map_5.0.md`.
 
 ### Phase 1 — Cross-reference protocol  *(reading, ~1 evening)*  → `docs/`
+
 Map OpenWhoop's documented UUIDs/packet formats onto what Phase 0 found. Identify: the **command**
 characteristic (we write requests), the **data** characteristic (band notifies us), and the
 **framing** (packet start/end, length fields, CRC). Stand on their map, verify against our device.
 
 ### Phase 2 — Live stream  *(Python, ~1 weekend)*  → `decode/`
+
 Subscribe to the data characteristic, decode live packets. **Heart rate first** — easiest to
 validate (compare to the band's own display or a chest strap). Then RR intervals if exposed.
 Milestone: real-time HR off our own strap, no phone, no cloud.
 
 ### Phase 3 — Historical backfill  *(Python, the hard part)*  → `decode/`
+
 The band buffers data in flash when disconnected — this is how the phone "catches up." Send the
 buffer-request command, decode the historical stream. Trickiest part: pagination/ack of a flash
 dump, likely sequence numbers we must ack to advance. Success = we've replicated the real sync.
 
 ### Phase 4 — Metrics  *(either language)*  → `decode/` or `daemon/`
+
 Raw sensor data → derived metrics. RMSSD for HRV (standard, documented). Strain/recovery as
 labeled approximations. Optionally a small modeling sub-project.
 
 ### Phase 5 — Rust daemon + frontend  → `daemon/`
+
 Reimplement the understood protocol in Rust/`btleplug`: background daemon connects on proximity,
 streams live, backfills on reconnect, writes to local SQLite. Thin frontend reads SQLite —
 either reuse a SwiftUI `MenuBarExtra`, or go Rust-native tray via `tao`/`tray-icon`.
@@ -96,7 +103,7 @@ either reuse a SwiftUI `MenuBarExtra`, or go Rust-native tray via `tao`/`tray-ic
 
 ## Current status
 
-- [x] Project scaffold + plan
+- [X] Project scaffold + plan
 - [ ] Phase 0 — recon script + GATT map
 - [ ] Phase 1 — protocol cross-reference
 - [ ] Phase 2 — live HR
@@ -126,6 +133,12 @@ any session where you introduce a new module, dependency, or convention, update 
 Write only what a future agent could not derive from reading the code: rules, boundaries,
 ownership decisions, non-obvious tradeoffs. Not file inventories (they go stale) and not what the
 code plainly does.
+
+## Code conventions
+
+- **Comments are straightforward.** Plain language, say what and why in one line. No clever
+  phrasing, no restating what the code already shows, no essays. If a comment is longer than the
+  code it explains, cut it.
 
 ## Open-source hygiene — no personal info in tracked files
 
